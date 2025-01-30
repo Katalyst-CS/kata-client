@@ -1,46 +1,35 @@
-version: '3.8'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+
+    container_name: kata_client_app
+    environment:
+      - DATABASE_NAME=kata_client_db
+      - FLASK_ENV=development
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres_password
+      - DATABASE_HOST=db
     ports:
       - "5000:5000"
-    environment:
-      - FLASK_ENV=development
-      - DATABASE_HOST=db
-      - DATABASE_PORT=3306
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=example
-      - DATABASE_NAME=exampledb
     depends_on:
       - db
 
   db:
-    image: mysql:8.0
-    container_name: mysql_db
-    ports:
-      - "3306:3306"
+    image: postgres
+    container_name: kata_client_service
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: exampledb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: example
-    volumes:
-      - db_data:/var/lib/mysql
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: kata_client_db
+    ports:
+      - "6000:5032"# Usando 6000 para evitar conflitos con instalacion postgres local. Cambiar a 5032 posteriormente.
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: phpmyadmin
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: example
-    depends_on:
-      - db
+
+    volumes: #Permite que los datos de PostgreSQL persistan aunque el contenedor se elimine.
+      - kata_client_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  kata_client_postgres_data:
