@@ -5,8 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copia los archivos de la aplicación
-COPY src/ /app/src
-COPY requirements.txt /app
+COPY requirements.txt requirements.txt
 
 # Instala las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
@@ -15,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Comando para ejecutar la aplicación
-CMD ["python", "/app/src/main.py"]
+CMD ["python", "src/core/main.py"]
