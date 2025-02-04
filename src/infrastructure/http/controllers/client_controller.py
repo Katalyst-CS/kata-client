@@ -5,6 +5,7 @@ from infrastructure.db.repositories.client_repository import ClientRepository
 client_bp = Blueprint('client', __name__)
 
 
+# Crear cliente
 @client_bp.route('/clients', methods=['POST'])
 def create_client():
     # Recogida de datos enviados por el usuario
@@ -41,4 +42,37 @@ def create_client():
     }), 201 #Codigo 201: created
 
 
+# Lista de todos los clientes
+@client_bp.route('/clients', methods=['GET'])
+def get_all_clients():
+    clients = ClientRepository.get_all_clients()
+    client_list = [{
+        "id": str(client.id),
+        "customer_type": client.customer_type,
+        "status": client.status,
+        "tax_id": client.tax_id,
+        "identifier": client.identifier,
+        "foreign_reference": str(client.foreign_reference) if client.foreign_reference else None,
+        "date_created": client.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+        "date_modified": client.date_modified.strftime('%Y-%m-%d %H:%M:%S'),
+    } for client in clients]
 
+    return jsonify(client_list), 200
+
+
+@client_bp.route('/clients/<client_id>', methods=['GET'])
+def get_client_by_id(client_id):
+    client = ClientRepository.get_client_by_id(client_id)
+    if client is None:
+        return jsonify({"error": "Cliente no encontrado"}), 404
+
+    return jsonify({
+        "id": str(client.id),
+        "customer_type": client.customer_type,
+        "status": client.status,
+        "tax_id": client.tax_id,
+        "identifier": client.identifier,
+        "foreign_reference": str(client.foreign_reference) if client.foreign_reference else None,
+        "date_created": client.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+        "date_modified": client.date_modified.strftime('%Y-%m-%d %H:%M:%S'),
+    }), 200
