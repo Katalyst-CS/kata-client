@@ -34,7 +34,6 @@ class ClientRepository:
     # UPDATE ['PUT']
     @staticmethod
     def update_client(client_id, **Kwargs):
-
         # Actualizacion de datos del cliente
         query = Client.update(**Kwargs).where(Client.id == client_id)
         # Verificamos las folas afectadas
