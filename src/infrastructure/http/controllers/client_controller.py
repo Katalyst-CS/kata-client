@@ -10,18 +10,22 @@ def create_client():
     # Recogida de datos enviados por el usuario
     data = request.get_json()
 
+    # Validar que data sea un diccionario
+    if not isinstance(data, dict):
+        return jsonify({"error": "El cuerpo de la solicitud debe ser un JSON válido"}),400
+
     # Validar datos requeridos (posible implementacion de DTO?)
     required_fields = ['customer_type', 'status', 'tax_id', 'identifier']
     if not all(field in data for field in required_fields):
-        return jsonify({"error:": "Faltan campos obligatorios."}), 400
+        return jsonify({"error": "Faltan campos obligatorios."}), 400
 
     # Crear cliente en la base de datos
     client = ClientRepository.create_client(
-        customer_type=data('customer_type'),
-        status=data('status'),
-        tax_id=data('tax_id'),
-        identifier=data('identifier')
-    )
+    customer_type=data['customer_type'],
+    status=data['status'],
+    tax_id=data['tax_id'],
+    identifier=data['identifier']
+)
 
     # Retornamos respuesta JSON con los datos del cliente introducidos;
 

@@ -15,6 +15,12 @@ def create_app():
         db.create_tables([Client], safe=True)
         db.close()
 
+        # Conexion a la base de datos antes de cada solicitud
+        @app.before_request
+        def before_request():
+            if db.is_closed():
+                db.connect()
+
     @app.route('/')
     def home():
         return {"message": "Kata Clients API runnig."}
