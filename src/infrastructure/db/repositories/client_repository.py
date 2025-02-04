@@ -3,7 +3,7 @@ from infrastructure.db.models.client_model import Client
 
 class ClientRepository:
 
-    # CREATE
+    # CREATE ['POST']
     @staticmethod
     def create_client(customer_type, status, tax_id, identifier, foreign_reference=None):
         """Crear un nuevo cliente en la base de datos"""
@@ -17,7 +17,7 @@ class ClientRepository:
         )
         return client
 
-    # READ
+    # READ ['GET']
     @staticmethod
     def get_client_by_id(client_id):
         try:
@@ -31,7 +31,7 @@ class ClientRepository:
         # Devuelve una lista con todos los clientes.
         return list(Client.select())
 
-    # UPDATE
+    # UPDATE ['PUT']
     @staticmethod
     def update_client(client_id, **Kwargs):
 
@@ -41,7 +41,7 @@ class ClientRepository:
         update_rows = query.execute()
         return update_rows > 0
 
-    # DELETE
+    # DELETE ['DELETE']
     @staticmethod
     def delete_client(client_id):
         try:
