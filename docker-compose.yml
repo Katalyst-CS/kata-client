@@ -1,21 +1,5 @@
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    container_name: kata_client_app
-    environment:
-      - DB_NAME=clients_db
-      - FLASK_ENV=development
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres_password
-      - DB_HOST=db
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
 
   db:
     image: postgres
@@ -25,7 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres_password
       POSTGRES_DB: clients_db
     ports:
-      - "5432:5432"
+      - 6000:5432 #Usando 6000 para evitar conflicto con postgres local
 
 
     volumes: #Permite que los datos de PostgreSQL persistan aunque el contenedor se elimine.

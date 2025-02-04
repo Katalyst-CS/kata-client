@@ -1,5 +1,4 @@
 from flask import Flask
-
 from infrastructure.db.db_connection.database import db
 from infrastructure.db.models.client_model import Client
 from infrastructure.http.controllers.client_controller import client_bp
