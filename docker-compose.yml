@@ -7,11 +7,11 @@ services:
 
     container_name: kata_client_app
     environment:
-      - DATABASE_NAME=kata_client_db
+      - DB_NAME=clients_db
       - FLASK_ENV=development
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres_password
-      - DATABASE_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres_password
+      - DB_HOST=db
     ports:
       - "5000:5000"
     depends_on:
@@ -23,9 +23,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_password
-      POSTGRES_DB: kata_client_db
+      POSTGRES_DB: clients_db
     ports:
-      - "6000:5032"# Usando 6000 para evitar conflitos con instalacion postgres local. Cambiar a 5032 posteriormente.
+      - "5432:5432"
 
 
     volumes: #Permite que los datos de PostgreSQL persistan aunque el contenedor se elimine.
