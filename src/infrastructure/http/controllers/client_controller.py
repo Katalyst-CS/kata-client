@@ -116,7 +116,7 @@ def delete_client(client_id):
         #Buscamos el cliente en la base de datos
         client = ClientRepository.get_client_by_id(client_id)
         #Si el cliente no existe:
-        if not client is None
+        if not client is None:
             return jsonify({"error": "Cliente no encontrado"}), 404
 
         #Si existe:
