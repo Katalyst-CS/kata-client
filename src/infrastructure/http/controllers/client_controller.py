@@ -1,3 +1,4 @@
+from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurveSignatureAlgorithm
 from flask import Blueprint, request, jsonify
 
 from infrastructure.db.repositories.client_repository import ClientRepository
@@ -5,7 +6,7 @@ from infrastructure.db.repositories.client_repository import ClientRepository
 client_bp = Blueprint('client', __name__)
 
 
-# Crear cliente
+#CREAR CLIENTE
 @client_bp.route('/clients', methods=['POST'])
 def create_client():
     # Recogida de datos enviados por el usuario
@@ -42,7 +43,7 @@ def create_client():
     }), 201 #Codigo 201: created
 
 
-# Lista de todos los clientes
+# LISTA DE TODOS LOS CLIENTES
 @client_bp.route('/clients', methods=['GET'])
 def get_all_clients():
     clients = ClientRepository.get_all_clients()
@@ -59,6 +60,7 @@ def get_all_clients():
 
     return jsonify(client_list), 200
 
+# BUSCAR CLIENTE POR ID
 
 @client_bp.route('/clients/<client_id>', methods=['GET'])
 def get_client_by_id(client_id):
@@ -76,3 +78,52 @@ def get_client_by_id(client_id):
         "date_created": client.date_created.strftime('%Y-%m-%d %H:%M:%S'),
         "date_modified": client.date_modified.strftime('%Y-%m-%d %H:%M:%S'),
     }), 200
+
+#ACTUALIZAR CLIENTE
+
+client_bp.route('/clients/<client_id>', methods = ['PUT'])
+def update_client(client_id):
+
+    try:
+        data = request.get_json()
+
+        #Validar que data sea un diccionario
+        if not isinstance(data,dict):
+            return jsonify({"error": "El cuerpo de la solicitud debe ser un JSON válido"}), 400
+
+
+        #Buscar el cliente en la base de datos.
+        client = ClientRepository.get_client_by_id(client_id)
+        if client is None:
+            return jsonify({"error": "Cliente no encontrado"}), 404
+
+        #Si existe en la base de datos:
+        update_client = ClientRepository.update_client(client_id, data)
+
+        #Comprobacion de actualizacion correcta del cliente.
+        if update_client:
+            return jsonify({"message": "Cliente actualizado correctamente"}), 200
+        else:
+            return jsonify({"error": "No se pudo actualizar el cliente"}), 400
+
+    except Exception as e:
+      return jsonify({"error": "No se pudo actualizar el cliente"}), 400
+
+# BORRAR CLIENTE
+@client_bp.route('/clients/<client_id>', methods = ['DELETE'])
+def delete_client(client_id):
+
+    try:
+        #Buscamos el cliente en la base de datos
+        client = ClientRepository.get_client_by_id(client_id)
+        #Si el cliente no existe:
+        if not client is None
+            return jsonify({"error": "Cliente no encontrado"}), 404
+
+        #Si existe:
+        delete_client - ClientRepository.delete_client(client_id)
+        # Si el borrado ha sido correcto
+        if delete_client:
+            return jsonify({"message":f"Cliente con id: {clien_id} borrado con exito"}),200
+        else:
+    return jsonify({"error":f" El clliente con id: {clien_id} no ha podido ser borrado"}), 200
