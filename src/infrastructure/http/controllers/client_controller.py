@@ -87,7 +87,7 @@ def get_client_by_id(client_id):
     except Exception as e:
         return jsonify({"error": f"Error al buscar el cliente: {str(e)}"}), 500
 
-#ACTUALIZAR CLIENTE
+# UPDATE
 
 @client_bp.route('/clients/<client_id>', methods=['PUT'])
 def update_client(client_id):
@@ -132,7 +132,7 @@ def update_client(client_id):
     except Exception as e:
         return jsonify({"error": f"No se pudo actualizar el cliente: {str(e)}"}), 500
 
-# BORRAR CLIENTE
+# DELETE
 @client_bp.route('/clients/<client_id>', methods = ['DELETE'])
 def delete_client(client_id):
 
