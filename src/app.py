@@ -14,7 +14,7 @@ def create_app():
         if db.is_closed():
             db.connect()
             db.create_tables([Client], safe=True)
-            db.close()
+
 
         # Conexion a la base de datos antes de cada solicitud
         @app.before_request
