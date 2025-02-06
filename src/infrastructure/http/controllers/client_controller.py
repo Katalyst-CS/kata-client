@@ -1,4 +1,3 @@
-from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurveSignatureAlgorithm
 from flask import Blueprint, request, jsonify
 
 from infrastructure.db.repositories.client_repository import ClientRepository
@@ -121,9 +120,12 @@ def delete_client(client_id):
             return jsonify({"error": "Cliente no encontrado"}), 404
 
         #Si existe:
-        delete_client - ClientRepository.delete_client(client_id)
-        # Si el borrado ha sido correcto
+        delete_client = ClientRepository.delete_client(client_id)
+        # Si el borrado ha sido correcto:
         if delete_client:
-            return jsonify({"message":f"Cliente con id: {clien_id} borrado con exito"}),200
+            return jsonify({"message": f"Cliente con id:{client_id} borrado con exito"}), 200
         else:
-    return jsonify({"error":f" El clliente con id: {clien_id} no ha podido ser borrado"}), 200
+            return jsonify({"error": f" El cliente con id: {client_id} no ha podido ser borrado"}), 200
+
+    except Exception as e:
+      return jsonify({"error": "No se pudo borrar el cliente"}), 400
