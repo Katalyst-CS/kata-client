@@ -11,9 +11,10 @@ def create_app():
     app.register_blueprint(client_bp)
 
     with app.app_context():
-        db.connect()
-        db.create_tables([Client], safe=True)
-        db.close()
+        if db.is_closed():
+            db.connect()
+            db.create_tables([Client], safe=True)
+            db.close()
 
         # Conexion a la base de datos antes de cada solicitud
         @app.before_request
@@ -21,9 +22,15 @@ def create_app():
             if db.is_closed():
                 db.connect()
 
+        # Cierre de conexion antes de cada solicitud.
+        @app.teardown_request
+        def teardown_request(exception):
+            if not db.is_closed():
+                db.close()
+
     @app.route('/')
     def home():
-        return {"message": "Kata Clients API runnig."}
+        return {"message": "Kata Clients API running."}
 
 
     return app

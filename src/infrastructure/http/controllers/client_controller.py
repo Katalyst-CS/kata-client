@@ -82,7 +82,6 @@ def get_client_by_id(client_id):
 
 client_bp.route('/clients/<client_id>', methods = ['PUT'])
 def update_client(client_id):
-
     try:
         data = request.get_json()
 
@@ -116,7 +115,7 @@ def delete_client(client_id):
         #Buscamos el cliente en la base de datos
         client = ClientRepository.get_client_by_id(client_id)
         #Si el cliente no existe:
-        if not client is None:
+        if client is None:
             return jsonify({"error": "Cliente no encontrado"}), 404
 
         #Si existe:

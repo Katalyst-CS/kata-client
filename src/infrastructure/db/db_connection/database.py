@@ -14,7 +14,7 @@ db = PostgresqlDatabase(
 )
 
 try:
-    db.connect()
+    db.connect(reuse_if_open=True)#
     print("Conexion realizada con exito")
     db.close()
 except Exception as e:

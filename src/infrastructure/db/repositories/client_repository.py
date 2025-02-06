@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from infrastructure.db.models.client_model import Client
 
 
@@ -23,7 +25,7 @@ class ClientRepository:
         try:
             # Devuelve el cliente que coincida con el id proporcionado.
             return Client.get(Client.id == client_id)
-        except Client.Doesnoexist:
+        except Client.DoesNotExist:
             return None
 
     @staticmethod
@@ -34,7 +36,15 @@ class ClientRepository:
     # UPDATE ['PUT']
     @staticmethod
     def update_client(client_id, **Kwargs):
-        # Actualizacion de datos del cliente
+
+        #Si no hay datos para actualizar.
+        if not Kwargs:
+            return False
+
+
+        #Actualizacion de la fecha modificada:
+        Kwargs['date_modified'] = datetime.now()
+        # Actualizacion de datos del cliente:
         query = Client.update(**Kwargs).where(Client.id == client_id)
         # Verificamos las folas afectadas
         update_rows = query.execute()
@@ -47,5 +57,5 @@ class ClientRepository:
             client = Client.get(Client.id == client_id)
             client.delete_instance()
             return True
-        except Client.Doesnoexist:
+        except Client.DoesNotExist:
             return False
